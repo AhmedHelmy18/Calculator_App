@@ -36,6 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               //buttons
+              Wrap(
+                children: [
+
+                ],
+              )
             ],
           ),
         ));
