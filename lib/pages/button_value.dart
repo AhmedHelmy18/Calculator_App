@@ -22,4 +22,26 @@ class Btn
   static const String n7 = '7';
   static const String n8 = '8';
   static const String n9 = '9';
+
+  static const List<String> buttonValues = [
+    del,
+    clr,
+    per,
+    multiply,
+    n7,
+    n8,
+    n9,
+    divide,
+    n4,
+    n5,
+    n6,
+    subtract,
+    n1,
+    n2,
+    n3,
+    add,
+    n0,
+    dot,
+    calculate
+  ];
 }
