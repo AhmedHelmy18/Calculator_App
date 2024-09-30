@@ -42,7 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
               children: Btn.buttonValues
                   .map(
                     (value) => SizedBox(
-                      width: screenSize.width / 4,
+                      width: value == Btn.n0
+                          ? screenSize.width / 2
+                          : (screenSize.width / 4),
                       height: screenSize.width / 5,
                       child: BuildButton(value),
                     ),
@@ -59,18 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Material(
-        color: [Btn.del, Btn.clr].contains(value)
-            ? Colors.blueGrey
-            : [
-                Btn.per,
-                Btn.multiply,
-                Btn.subtract,
-                Btn.add,
-                Btn.divide,
-                Btn.calculate
-              ].contains(value)
-                ? Colors.orange
-                : Colors.black87,
+        color: getBtnColor(value),
         clipBehavior: Clip.hardEdge,
         shape: OutlineInputBorder(
           borderSide: BorderSide(
@@ -81,10 +72,31 @@ class _HomeScreenState extends State<HomeScreen> {
         child: InkWell(
           onTap: () {},
           child: Center(
-            child: Text(value),
+            child: Text(
+              value,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Color getBtnColor(value) {
+    return [Btn.del, Btn.clr].contains(value)
+        ? Colors.blueGrey
+        : [
+            Btn.per,
+            Btn.multiply,
+            Btn.subtract,
+            Btn.add,
+            Btn.divide,
+            Btn.calculate
+          ].contains(value)
+            ? Colors.orange
+            : Colors.black87;
   }
 }
