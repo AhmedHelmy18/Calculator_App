@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'button_value.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,6 +9,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String number1 = '';
+  String operand = '';
+  String number2 = '';
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -28,7 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   alignment: Alignment.bottomRight,
                   padding: EdgeInsets.all(16),
-                  child: Text('0',
+                  child: Text(
+                      '$number1$operand$number2'.isEmpty
+                          ? '0'
+                          : '$number1$operand$number2',
                       style: const TextStyle(
                         fontSize: 48,
                         fontWeight: FontWeight.bold,
@@ -70,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(100),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () => onBtnTap(value),
           child: Center(
             child: Text(
               value,
@@ -85,6 +91,64 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // on tap numbers
+  void onBtnTap(String value) {
+    if (value == Btn.del) {
+      delete();
+      return;
+    }
+    appendValue(value);
+  }
+
+  // delete one from the end
+  void delete() {
+    if (number2.isNotEmpty) {
+      number2 = number2.substring(0, number2.length - 1);
+    } else if (operand.isNotEmpty) {
+      operand = "";
+    } else if (number1.isNotEmpty) {
+      number1 = number1.substring(0, number1.length - 1);
+    }
+    setState(() {});
+  }
+
+  // append values to the end
+  void appendValue(String value) {
+    // if is operand and not "."
+    if (value != Btn.dot && int.tryParse(value) == null) {
+      // operand pressed
+      if (operand.isNotEmpty && number2.isNotEmpty) {
+        // calculate the equation before assigning new operand
+      }
+      operand = value;
+    }
+    // assign value to number1 variable
+    else if (number1.isEmpty || operand.isEmpty) {
+      // check if value is "." | ex: number1 = "1.2"
+      if (value == Btn.dot && number1.contains(Btn.dot)) return;
+      if (value == Btn.dot && (number1.isEmpty || number1 == Btn.n0)) {
+        // ex: number1 = "" | "0"
+        value = '0.';
+      }
+      number1 += value;
+    }
+    // assign value to number2 variable
+    else if (number2.isEmpty || operand.isNotEmpty) {
+      // check if value is "." | ex: number2 = "1.2"
+      if (value == Btn.dot && number2.contains(Btn.dot)) return;
+      if (value == Btn.dot && (number2.isEmpty || number2 == Btn.n0)) {
+        // ex: number2 = "" | "0"
+        value = '0.';
+      }
+      number2 += value;
+    }
+
+    setState(
+      () {},
+    );
+  }
+
+  // colors
   Color getBtnColor(value) {
     return [Btn.del, Btn.clr].contains(value)
         ? Colors.blueGrey
