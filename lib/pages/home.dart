@@ -97,7 +97,51 @@ class _HomeScreenState extends State<HomeScreen> {
       delete();
       return;
     }
+
+    if (value == Btn.clr) {
+      clearAll();
+      return;
+    }
+
+    if (value == Btn.per) {
+      convertToPercentage();
+      return;
+    }
+
+    // if(value == Btn.calculate){
+    //   calculate();
+    //   return;
+    // }
     appendValue(value);
+  }
+
+  // convert output to %
+  void convertToPercentage() {
+    if (number1.isNotEmpty && operand.isNotEmpty && number2.isNotEmpty) {
+      // calculate before conversion
+      // TODO
+    }
+    if (operand.isNotEmpty) {
+      // cannot be converted
+      return;
+    }
+    final number = double.parse(number1) ;
+    setState(() {
+      number1 = "${(number / 100)}";
+      operand = "";
+      number2 = "";
+    });
+  }
+
+  // clears All Outputs
+  void clearAll() {
+    setState(
+      () {
+        number1 = "";
+        operand = "";
+        number2 = "";
+      },
+    );
   }
 
   // delete one from the end
