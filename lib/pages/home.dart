@@ -13,16 +13,43 @@ class _HomeScreenState extends State<HomeScreen> {
   String operand = '';
   String number2 = '';
 
+  bool ThemeColor = false;
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: ColorTheme(),
       appBar: AppBar(
+        backgroundColor: ColorTheme(),
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0),
           child: Image.asset('asset/playstore.png'),
         ),
-        title: const Text('Calculator'),
+        title: Text(
+          'Calculator',
+          style: TextStyle(
+            color: ThemeColor ? Colors.white : Colors.black,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                ThemeColor = !ThemeColor;
+              });
+            },
+            icon: ThemeColor
+                ? Icon(
+                    Icons.brightness_3,
+                    color: ThemeColor ? Colors.white : Colors.black,
+                  )
+                : Icon(
+                    Icons.wb_sunny,
+                    color: ThemeColor ? Colors.white : Colors.black,
+                  ),
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -36,7 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 reverse: true,
                 child: Text(
                   _getDisplayText(),
-                  style: const TextStyle(
+                  style:  TextStyle(
+                    color: ThemeColor ? Colors.white : Colors.black,
                     fontSize: 48,
                     fontWeight: FontWeight.bold,
                   ),
@@ -81,7 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Center(
             child: Text(
               value,
-              style: const TextStyle(
+              style:  TextStyle(
+                color: ThemeColor ? Colors.white : Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
               ),
@@ -214,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Color getBtnColor(String value) {
-    return [Btn.del, Btn.clr].contains(value)
+    return ThemeColor ? [Btn.del, Btn.clr].contains(value)
         ? Colors.blueGrey
         : [
             Btn.per,
@@ -225,6 +254,25 @@ class _HomeScreenState extends State<HomeScreen> {
             Btn.calculate
           ].contains(value)
             ? Colors.orange
-            : Colors.black87;
+            : Color.fromARGB(36,36,36,255) : [Btn.del, Btn.clr].contains(value)
+            ? Colors.blueGrey.shade300
+            : [
+                Btn.per,
+                Btn.multiply,
+                Btn.subtract,
+                Btn.add,
+                Btn.divide,
+                Btn.calculate
+              ].contains(value)
+                ? Colors.orange
+                : Color.fromARGB(255,255,255,255);
+  }
+
+  dynamic ColorTheme() {
+    if (ThemeColor) {
+      return Color.fromARGB(0,0,0,255);
+    } else {
+      return Color.fromARGB(247,247,247,255);
+    }
   }
 }

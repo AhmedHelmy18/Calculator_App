@@ -20,7 +20,7 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#ffffff"
-  image: asset/playstore.png
+  background_image: asset/playstore.png
   android: true
   ios: true
   fullscreen: true
