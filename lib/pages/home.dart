@@ -22,55 +22,44 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.only(left: 20.0),
           child: Image.asset('asset/playstore.png'),
         ),
-        title: Text('Calculator'),
+        title: const Text('Calculator'),
       ),
-      body: SafeArea(
-        bottom: false,
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context)
-                  .size
-                  .height, // Provide a bounded height
-            ),
-            child: Column(
-              children: [
-                // outputs
-                Expanded(
-                  child: SingleChildScrollView(
-                    reverse: true,
-                    child: Container(
-                      alignment: Alignment.bottomRight,
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        _getDisplayText(),
-                        style: const TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
+      body: Column(
+        children: [
+          // Display Section (flexible to take available space)
+          Expanded(
+            flex: 1,
+            child: Container(
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                reverse: true,
+                child: Text(
+                  _getDisplayText(),
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.end,
                 ),
-                //buttons
-                Wrap(
-                  children: Btn.buttonValues
-                      .map(
-                        (value) => SizedBox(
-                          width: value == Btn.n0
-                              ? screenSize.width / 2
-                              : (screenSize.width / 4),
-                          height: screenSize.width / 5,
-                          child: BuildButton(value),
-                        ),
-                      )
-                      .toList(),
-                )
-              ],
+              ),
             ),
           ),
-        ),
+          // Buttons Section (fixed at the bottom)
+          Wrap(
+            children: Btn.buttonValues
+                .map(
+                  (value) => SizedBox(
+                    width: value == Btn.n0
+                        ? screenSize.width / 2
+                        : (screenSize.width / 4),
+                    height: screenSize.width / 5,
+                    child: BuildButton(value),
+                  ),
+                )
+                .toList(),
+          ),
+        ],
       ),
     );
   }
@@ -108,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return displayText.isEmpty ? '0' : displayText;
   }
 
-  // on tap numbers
   void onBtnTap(String value) {
     if (value == Btn.del) {
       delete();
@@ -132,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
     appendValue(value);
   }
 
-  // calculate the result
   void calculate() {
     if (number1.isEmpty) return;
     if (operand.isEmpty) return;
@@ -169,14 +156,11 @@ class _HomeScreenState extends State<HomeScreen> {
     number2 = "";
   }
 
-  // convert output to %
   void convertToPercentage() {
     if (number1.isNotEmpty && operand.isNotEmpty && number2.isNotEmpty) {
-      // calculate before conversion
       calculate();
     }
     if (operand.isNotEmpty) {
-      // cannot be converted
       return;
     }
     final number = double.parse(number1);
@@ -187,18 +171,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // clears All Outputs
   void clearAll() {
-    setState(
-      () {
-        number1 = "";
-        operand = "";
-        number2 = "";
-      },
-    );
+    setState(() {
+      number1 = "";
+      operand = "";
+      number2 = "";
+    });
   }
 
-  // delete one from the end
   void delete() {
     if (number2.isNotEmpty) {
       number2 = number2.substring(0, number2.length - 1);
@@ -210,45 +190,30 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
-  // append values to the end
   void appendValue(String value) {
-    // if is operand and not "."
     if (value != Btn.dot && int.tryParse(value) == null) {
-      // operand pressed
       if (operand.isNotEmpty && number2.isNotEmpty) {
-        // calculate the equation before assigning new operand
         calculate();
       }
       operand = value;
-    }
-    // assign value to number1 variable
-    else if (number1.isEmpty || operand.isEmpty) {
-      // check if value is "." | ex: number1 = "1.2"
+    } else if (number1.isEmpty || operand.isEmpty) {
       if (value == Btn.dot && number1.contains(Btn.dot)) return;
       if (value == Btn.dot && (number1.isEmpty || number1 == Btn.n0)) {
-        // ex: number1 = "" | "0"
         value = '0.';
       }
       number1 += value;
-    }
-    // assign value to number2 variable
-    else if (number2.isEmpty || operand.isNotEmpty) {
-      // check if value is "." | ex: number2 = "1.2"
+    } else if (number2.isEmpty || operand.isNotEmpty) {
       if (value == Btn.dot && number2.contains(Btn.dot)) return;
       if (value == Btn.dot && (number2.isEmpty || number2 == Btn.n0)) {
-        // ex: number2 = "" | "0"
         value = '0.';
       }
       number2 += value;
     }
 
-    setState(
-      () {},
-    );
+    setState(() {});
   }
 
-  // colors
-  Color getBtnColor(value) {
+  Color getBtnColor(String value) {
     return [Btn.del, Btn.clr].contains(value)
         ? Colors.blueGrey
         : [
