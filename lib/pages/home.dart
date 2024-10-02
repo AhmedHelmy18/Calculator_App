@@ -18,59 +18,71 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calculator App'),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 20.0),
+          child: Image.asset('asset/playstore.png'),
+        ),
+        title: Text('Calculator'),
       ),
       body: SafeArea(
         bottom: false,
-        child: Column(
-          children: [
-            // outputs
-            Expanded(
-              child: SingleChildScrollView(
-                reverse: true,
-                child: Container(
-                  alignment: Alignment.bottomRight,
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                      '$number1$operand$number2'.isEmpty
-                          ? '0'
-                          : '$number1$operand$number2',
-                      style: const TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.end),
-                ),
-              ),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context)
+                  .size
+                  .height, // Provide a bounded height
             ),
-            //buttons
-            Wrap(
-              children: Btn.buttonValues
-                  .map(
-                    (value) => SizedBox(
-                      width: value == Btn.n0
-                          ? screenSize.width / 2
-                          : (screenSize.width / 4),
-                      height: screenSize.width / 5,
-                      child: BuildButton(value),
+            child: Column(
+              children: [
+                // outputs
+                Expanded(
+                  child: SingleChildScrollView(
+                    reverse: true,
+                    child: Container(
+                      alignment: Alignment.bottomRight,
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                        _getDisplayText(),
+                        style: const TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
                     ),
-                  )
-                  .toList(),
-            )
-          ],
+                  ),
+                ),
+                //buttons
+                Wrap(
+                  children: Btn.buttonValues
+                      .map(
+                        (value) => SizedBox(
+                          width: value == Btn.n0
+                              ? screenSize.width / 2
+                              : (screenSize.width / 4),
+                          height: screenSize.width / 5,
+                          child: BuildButton(value),
+                        ),
+                      )
+                      .toList(),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget BuildButton(value) {
+  Widget BuildButton(String value) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Material(
         color: getBtnColor(value),
         clipBehavior: Clip.hardEdge,
         shape: OutlineInputBorder(
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: Colors.white24,
           ),
           borderRadius: BorderRadius.circular(100),
@@ -89,6 +101,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  String _getDisplayText() {
+    final displayText = '$number1$operand$number2';
+    return displayText.isEmpty ? '0' : displayText;
   }
 
   // on tap numbers

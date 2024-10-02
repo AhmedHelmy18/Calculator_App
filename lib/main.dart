@@ -1,12 +1,17 @@
 import 'package:calculate_app/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
-  runApp(const CalculateApp());
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const Calculator());
+  FlutterNativeSplash.remove();
 }
 
-class CalculateApp extends StatelessWidget {
-  const CalculateApp({super.key});
+class Calculator extends StatelessWidget {
+   const Calculator({super.key});
 
   @override
   Widget build(BuildContext context) {
