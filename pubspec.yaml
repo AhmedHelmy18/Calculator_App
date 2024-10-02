@@ -18,12 +18,18 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+
+
 flutter_native_splash:
-  color: "#ffffff"
-  background_image: asset/playstore.png
+  color: "#000000"
+  image: asset/appstore.png
+  android_gravity: center
   android: true
   ios: true
-  fullscreen: true
+  android_12:
+    image: asset/appstore.png
+    icon_background_color: "#000000"
+    fullscreen: true #
 
 flutter:
   uses-material-design: true
